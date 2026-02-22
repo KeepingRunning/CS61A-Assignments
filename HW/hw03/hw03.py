@@ -231,5 +231,5 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return lambda n: (lambda f, k: f(f, k))(lambda f, k: 1 if k == 0 else mul(k, f(f, sub(k, 1))), n)
+    return lambda n: (lambda t, n: t(t, n)) (lambda f, n: 1 if n == 1 else n * f(f,n - 1), n)
 
