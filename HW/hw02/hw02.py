@@ -55,10 +55,8 @@ def accumulate(fuse, start, n, term):
     19
     """
     "*** YOUR CODE HERE ***"
-    ans = start
-    for i in range(1, n + 1):
-        ans = fuse(ans, term(i))
-    return ans
+    return fuse(accumulate(fuse, start, n - 1, term), term(n)) if n > 0 else start
+    
 
 
 def summation_using_accumulate(n, term):
@@ -105,9 +103,4 @@ def make_repeater(f, n):
     390625
     """
     "*** YOUR CODE HERE ***"
-    def func(x):
-        ans = x
-        for i in range(n):
-            ans = f(ans)
-        return ans
-    return func
+    return lambda x : x if n == 0 else make_repeater(f, n - 1)(f(x))
