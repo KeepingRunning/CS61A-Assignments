@@ -8,7 +8,7 @@ def digit(n, k):
     >>> digit(3579, 10)
     0
     """
-    return ____
+    return (n // 10 ** k) % 10
 
 
 def middle(a, b, c):
@@ -26,7 +26,7 @@ def middle(a, b, c):
     >>> middle(30, 5, 40)
     30
     """
-    return ____
+    return a + b + c - min(a, b, c) - max(a, b, c)
 
 
 def falling(n, k):
@@ -42,6 +42,7 @@ def falling(n, k):
     1
     """
     "*** YOUR CODE HERE ***"
+    return 1 if k == 0 else n * falling(n - 1, k - 1)
 
 
 def divisible_by_k(n, k):
@@ -65,7 +66,8 @@ def divisible_by_k(n, k):
     0
     """
     "*** YOUR CODE HERE ***"
-
+    ans = 0
+    return len([print(i) for i in range(1, n + 1) if i % k == 0])
 
 def sum_digits(y):
     """Sum all the digits of y.
@@ -81,7 +83,7 @@ def sum_digits(y):
     6
     """
     "*** YOUR CODE HERE ***"
-
+    return 0 if y == 0 else sum_digits(y // 10) + (y % 10)
 
 def double_eights(n):
     """Return true if n has two eights in a row.
@@ -99,4 +101,4 @@ def double_eights(n):
     False
     """
     "*** YOUR CODE HERE ***"
-
+    return False if n < 10 else n % 100 == 88 or double_eights(n // 10)
