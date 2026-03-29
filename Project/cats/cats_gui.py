@@ -139,4 +139,5 @@ def favicon():
 
 
 if __name__ == "__main__" or os.environ.get("ENV") == "prod":
-    app = start(PORT, DEFAULT_SERVER, GUI_FOLDER, multiplayer.db_init)
+    db_init = multiplayer.db_init if cats.enable_multiplayer else None
+    app = start(PORT, DEFAULT_SERVER, GUI_FOLDER, db_init)
