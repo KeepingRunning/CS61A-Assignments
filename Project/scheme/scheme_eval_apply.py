@@ -33,7 +33,9 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
         return scheme_forms.SPECIAL_FORMS[first](rest, env)
     else:
         # BEGIN PROBLEM 3
-        "*** YOUR CODE HERE ***"
+        procedure = scheme_eval(first, env)
+        args = rest.map(lambda x: scheme_eval(x, env))
+        return scheme_apply(procedure, args, env)
         # END PROBLEM 3
 
 def scheme_apply(procedure, args, env):
@@ -44,21 +46,41 @@ def scheme_apply(procedure, args, env):
        assert False, "Not a Frame: {}".format(env)
     if isinstance(procedure, BuiltinProcedure):
         # BEGIN PROBLEM 2
-        "*** YOUR CODE HERE ***"
+        def convert(args):
+            if args is nil:
+                return []
+            return [args.first] + convert(args.rest)
+        args = convert(args)
+        if procedure.need_env:
+            args += [env]
         # END PROBLEM 2
         try:
             # BEGIN PROBLEM 2
-            "*** YOUR CODE HERE ***"
+            return procedure.py_func(*args)
             # END PROBLEM 2
         except TypeError as err:
             raise SchemeError('incorrect number of arguments: {0}'.format(procedure))
     elif isinstance(procedure, LambdaProcedure):
         # BEGIN PROBLEM 9
-        "*** YOUR CODE HERE ***"
+        """
+        scm> (define x 5)
+        x
+        scm> (define outer (lambda (x)
+        ....   (lambda () (print x))))
+        outer
+        scm> (define inner (outer 2))
+        inner
+        scm> (inner) ;; which x is accessed? which frame is the parent?
+        5
+        """
+        # print(f"procedure fromal: {procedure.formals} procedure body: {procedure.body}, args: {args}, env: {env}")
+        childFrame = procedure.env.make_child_frame(procedure.formals, args)
+        return eval_all(procedure.body, childFrame)
         # END PROBLEM 9
     elif isinstance(procedure, MuProcedure):
         # BEGIN PROBLEM 11
-        "*** YOUR CODE HERE ***"
+        childFrame = env.make_child_frame(procedure.formals, args)
+        return eval_all(procedure.body, childFrame)
         # END PROBLEM 11
     else:
         assert False, "Unexpected procedure: {}".format(procedure)
@@ -79,7 +101,13 @@ def eval_all(expressions, env):
     2
     """
     # BEGIN PROBLEM 6
-    return scheme_eval(expressions.first, env) # replace this with lines of your own code
+    # return scheme_eval(expressions.first, env) # replace this with lines of your own code
+    if expressions is nil:
+        return None
+    if expressions.rest is nil:
+        return scheme_eval(expressions.first, env)
+    scheme_eval(expressions.first, env)
+    return eval_all(expressions.rest, env)
     # END PROBLEM 6
 
 
